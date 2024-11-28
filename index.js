@@ -24,6 +24,12 @@ async function run() {
     await client.connect();
     const database = client.db("coffeeDB");
     const coffeeCollection = database.collection("coffees");
+    //read
+    app.get("/coffees", async (req, res) => {
+      const cursor = coffeeCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     //create
     app.post("/coffees", async (req, res) => {

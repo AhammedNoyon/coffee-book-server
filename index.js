@@ -37,15 +37,12 @@ async function run() {
       const result = await coffeeCollection.findOne(query);
       res.send(result);
     });
-    //create
     app.post("/coffees", async (req, res) => {
       const coffees = req.body;
       console.log("insert this coffee by post method", coffees);
       const result = await coffeeCollection.insertOne(coffees);
       res.send(result);
     });
-
-    //update
     app.put("/coffees/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -69,7 +66,6 @@ async function run() {
       );
       res.send(result);
     });
-    //delete
     app.delete("/coffees/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -87,6 +83,18 @@ async function run() {
       const newUser = req.body;
       console.log(newUser);
       const result = await userCollection.insertOne(newUser);
+      res.send(result);
+    });
+    app.patch("/users", async (req, res) => {
+      const email = req.body?.email;
+      const filter = { email };
+      const updatedLastSignInTime = req.body?.lastSignInTime;
+      const updatedUser = {
+        $set: {
+          lastSignInTime: updatedLastSignInTime,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updatedUser);
       res.send(result);
     });
     app.delete("/users/:id", async (req, res) => {
